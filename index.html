@@ -1,20 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Pages Site</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file if you have one -->
+<title>Real-Time Chat</title>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My GitHub Pages Site</h1>
-    </header>
-    <main>
-        <p>This is a paragraph of text on my site.</p>
-    </main>
-    <footer>
-        <p>&copy; 2024 My GitHub Pages Site</p>
-    </footer>
+<h1>Real-Time Chat</h1>
+<div id="messages"></div>
+<input type="text" id="messageInput" />
+<button onclick="sendMessage()">Send</button>
+<script>
+const socket = new WebSocket('ws://localhost:8080');
+socket.addEventListener('open', () => {
+console.log('Connected to WebSocket server.');
+});
+socket.addEventListener('message', (event) => {
+const messagesDiv = document.getElementById('messages');
+messagesDiv.innerHTML += `<p>${event.data.toString()}</p>`;
+});
+function sendMessage() {
+const messageInput = document.getElementById('messageInput');
+const message = messageInput.value;
+socket.send(message);
+messageInput.value = '';
+}
+</script>
 </body>
 </html>
